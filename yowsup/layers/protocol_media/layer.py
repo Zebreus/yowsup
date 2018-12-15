@@ -4,6 +4,8 @@ from .protocolentities import AudioDownloadableMediaMessageProtocolEntity
 from .protocolentities import VideoDownloadableMediaMessageProtocolEntity
 from .protocolentities import LocationMediaMessageProtocolEntity
 from .protocolentities import VCardMediaMessageProtocolEntity
+from .protocolentities import UrlMediaMessageProtocolEntity
+from .protocolentities import DocumentDownloadableMediaMessageProtocolEntity
 from .protocolentities import RequestUploadIqProtocolEntity, ResultRequestUploadIqProtocolEntity
 from yowsup.layers.protocol_iq.protocolentities import IqProtocolEntity, ErrorIqProtocolEntity
 
@@ -52,6 +54,14 @@ class YowMediaProtocolLayer(YowProtocolLayer):
             elif mediaNode.getAttributeValue("type") == "vcard":
                 entity = VCardMediaMessageProtocolEntity.fromProtocolTreeNode(node)
                 self.toUpper(entity)
+            elif mediaNode.getAttributeValue("type") == "document":
+                entity = DocumentDownloadableMediaMessageProtocolEntity.fromProtocolTreeNode(node)
+                self.toUpper(entity)
+            elif mediaNode.getAttributeValue("type") == "url":
+                entity = UrlMediaMessageProtocolEntity.fromProtocolTreeNode(node)
+                self.toUpper(entity)
+            else:
+                logging.warning("Unhandled Media Message Type");
 
     def sendIq(self, entity):
         """
